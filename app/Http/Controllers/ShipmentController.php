@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Shipment;
 use App\Models\ShipmentHistory;
+use App\Mail\ShipmentCreatedMail;
+use App\Mail\ShipmentHistoryMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class ShipmentController extends Controller
@@ -129,6 +132,14 @@ class ShipmentController extends Controller
 
         // Add initial tracking event
         $shipment->addTrackingEvent('pending', 'Shipment created and pending pickup');
+        
+        // Send email notification to receiver
+        try {
+            Mail::to($shipment->receiver_email)->send(new ShipmentCreatedMail($shipment));
+        } catch (\Exception $e) {
+            // Log error but don't fail the shipment creation
+            \Log::error('Failed to send shipment created email: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.shipments.index')
             ->with('success', 'Shipment created successfully.');
@@ -254,6 +265,14 @@ class ShipmentController extends Controller
         // Update the shipment status if it's different
         if ($shipment->status !== $request->status) {
             $shipment->update(['status' => $request->status]);
+        }
+        
+        // Send email notification to receiver
+        try {
+            Mail::to($shipment->receiver_email)->send(new ShipmentHistoryMail($shipment, $history));
+        } catch (\Exception $e) {
+            // Log error but don't fail the history creation
+            \Log::error('Failed to send shipment history email: ' . $e->getMessage());
         }
 
         return redirect()->route('admin.shipments.show', $shipment)

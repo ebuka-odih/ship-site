@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { ArrowLeft, Edit, Package, MapPin, User, Phone, Mail, Weight, DollarSign, Clock, Truck, CheckCircle, XCircle, Plus, Trash2, Check, Loader2, ArrowUp, ArrowDown, AlertTriangle, Pause, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Edit, Package, MapPin, User, Phone, Mail, Weight, DollarSign, Clock, Truck, CheckCircle, XCircle, Plus, Trash2, Check, Loader2, ArrowUp, ArrowDown, AlertTriangle, Pause, AlertCircle, Download, FileText, Receipt } from 'lucide-react'
 import { Link } from '@inertiajs/react'
 
 interface User {
@@ -423,6 +423,40 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                   <span className="hidden sm:inline">Edit Shipment</span>
                   <span className="sm:hidden">Edit</span>
                 </Link>
+              </Button>
+            </div>
+            
+            {/* PDF Download Buttons */}
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-slate-500 text-slate-300 hover:bg-slate-700"
+                onClick={() => window.open(`/admin/shipments/${shipment.id}/pdf`, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Details PDF</span>
+                <span className="sm:hidden">PDF</span>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-slate-500 text-slate-300 hover:bg-slate-700"
+                onClick={() => window.open(`/admin/shipments/${shipment.id}/label`, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Label</span>
+                <span className="sm:hidden">Label</span>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-slate-500 text-slate-300 hover:bg-slate-700"
+                onClick={() => window.open(`/admin/shipments/${shipment.id}/invoice`, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
+              >
+                <Receipt className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Invoice</span>
+                <span className="sm:hidden">Invoice</span>
               </Button>
             </div>
           </div>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1e293b;
+            color: white;
+        }
+
+        .test-section {
+            background-color: #334155;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #475569;
+        }
+
+        .test-link {
+            display: inline-block;
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .test-link:hover {
+            background-color: #2563eb;
+        }
+
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #065f46;
+            color: #d1fae5;
+        }
+
+        .error {
+            background-color: #7f1d1d;
+            color: #fecaca;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🚢 Shipment Admin Form Test</h1>
+
+    <div class="test-section">
+        <h2>📋 Test Links</h2>
+        <a href="http://127.0.0.1:8000/admin" class="test-link" target="_blank">Admin Dashboard</a>
+        <a href="http://127.0.0.1:8000/admin/shipments" class="test-link" target="_blank">Shipments List</a>
+        <a href="http://127.0.0.1:8000/admin/shipments/create" class="test-link" target="_blank">Create Shipment</a>
+        <a href="http://127.0.0.1:8000/admin/users" class="test-link" target="_blank">Users Management</a>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Form Tests to Perform</h2>
+        <ol>
+            <li><strong>Navigation Test:</strong> Click through all admin links above</li>
+            <li><strong>Form Loading:</strong> Verify the create shipment form loads without errors</li>
+            <li><strong>Input Styling:</strong> Check that input fields have proper contrast and are readable</li>
+            <li><strong>Form Validation:</strong> Try submitting empty form to test validation</li>
+            <li><strong>Form Submission:</strong> Fill out a complete form and submit</li>
+            <li><strong>Dark Theme:</strong> Verify all cards and inputs use the dark theme</li>
+            <li><strong>Responsive Design:</strong> Test on different screen sizes</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🎨 Expected Styling</h2>
+        <ul>
+            <li>Dark background (slate-900)</li>
+            <li>Cards with slate-700 background</li>
+            <li>Input fields with slate-600 background and white text</li>
+            <li>Blue focus states on inputs</li>
+            <li>Proper contrast for all text elements</li>
+            <li>Icons with accent colors (blue, green, etc.)</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Server Status</h2>
+        <div id="server-status">Checking server status...</div>
+    </div>
+
+    <script>
+        // Test server connectivity
+        async function testServer() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/admin');
+                if (response.ok) {
+                    document.getElementById('server-status').innerHTML =
+                        '<div class="status success">✅ Laravel server is running on port 8000</div>';
+                } else {
+                    document.getElementById('server-status').innerHTML =
+                        '<div class="status error">❌ Server responded with error: ' + response.status + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('server-status').innerHTML =
+                    '<div class="status error">❌ Cannot connect to server: ' + error.message + '</div>';
+            }
+        }
+
+        // Test Vite dev server
+        async function testVite() {
+            try {
+                const response = await fetch('http://127.0.0.1:5173');
+                if (response.ok) {
+                    document.getElementById('server-status').innerHTML +=
+                        '<div class="status success">✅ Vite dev server is running on port 5173</div>';
+                } else {
+                    document.getElementById('server-status').innerHTML +=
+                        '<div class="status error">❌ Vite server error: ' + response.status + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('server-status').innerHTML +=
+                    '<div class="status error">❌ Vite server not accessible: ' + error.message + '</div>';
+            }
+        }
+
+        // Run tests
+        testServer();
+        testVite();
+    </script>
+</body>
+
+</html>

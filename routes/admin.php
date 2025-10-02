@@ -16,15 +16,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         'users' => 'user'
     ]);
     
-    // Custom route names for user management
-    Route::get('/users', [AdminController::class, 'users'])->name('users');
-    Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
-    Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
-    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
-    Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
-    Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
-    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
-    
     // Shipment management routes
     Route::resource('shipments', ShipmentController::class);
     Route::post('/shipments/{shipment}/tracking', [ShipmentController::class, 'addTrackingEvent'])->name('shipments.tracking');

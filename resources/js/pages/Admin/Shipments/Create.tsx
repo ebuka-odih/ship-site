@@ -506,10 +506,12 @@ export default function CreateShipment() {
 
                 <div className="space-y-2">
                   <Label htmlFor="destination" className="text-sm font-medium">Destination</Label>
-                  <CountrySelect
+                  <Input
+                    id="destination"
+                    type="text"
                     value={data.destination}
-                    onValueChange={(value) => setData('destination', value)}
-                    placeholder="Select destination country"
+                    onChange={(e) => setData('destination', e.target.value)}
+                    placeholder="Enter destination"
                     className={errors.destination ? 'border-red-500' : ''}
                   />
                   {errors.destination && (

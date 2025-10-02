@@ -492,7 +492,7 @@
                             <ul class="list-wrap">
 
                                 <li class="header-btn">
-                                    <a href="{{ route('contact') }}" class="btn btn-three">Get A Quote <img
+                                    <a href="{{ route('track') }}" class="btn btn-three">Track <img
                                             src="assets/img/icon/right_arrow.svg" alt="" class="injectable"></a>
                                 </li>
                             </ul>
@@ -522,6 +522,7 @@
                                     <li><a href="{{ route('home') }}">Home</a></li>
                                     <li><a href="{{ route('services') }}">Our Services</a></li>
                                     <li><a href="{{ route('about') }}">About Us</a></li>
+                                    <li><a href="{{ route('track') }}">Track</a></li>
                                     <li><a href="{{ route('contact') }}">Contacts</a></li>
                                 </ul>
                             </div>

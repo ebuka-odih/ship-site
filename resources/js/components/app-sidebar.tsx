@@ -1,5 +1,6 @@
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
+import { NavFooter } from '@/components/nav-footer';
 import {
     Sidebar,
     SidebarContent,
@@ -12,7 +13,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Users, Package } from 'lucide-react';
+import { LayoutGrid, Users, Package, ExternalLink } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -33,7 +34,13 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [];
+const footerNavItems: NavItem[] = [
+    {
+        title: 'View Site',
+        href: '/',
+        icon: ExternalLink,
+    },
+];
 
 export function AppSidebar() {
     return (
@@ -55,6 +62,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
+                <NavFooter items={footerNavItems} />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

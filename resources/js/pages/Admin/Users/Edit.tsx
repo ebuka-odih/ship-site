@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AppLayout from '@/layouts/app-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -35,7 +35,7 @@ export default function EditUser({ user }: EditUserProps) {
   }
 
   return (
-    <AdminLayout>
+    <AppLayout>
       <Head title={`Edit User - ${user.name}`} />
       
       <div className="space-y-6">
@@ -152,7 +152,7 @@ export default function EditUser({ user }: EditUserProps) {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </AppLayout>
   )
 }
 

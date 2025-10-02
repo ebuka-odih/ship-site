@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AppLayout from '@/layouts/app-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -26,7 +26,7 @@ export default function ShowUser({ user }: ShowUserProps) {
   }
 
   return (
-    <AdminLayout>
+    <AppLayout>
       <Head title={`User Details - ${user.name}`} />
       
       <div className="space-y-6">
@@ -158,7 +158,7 @@ export default function ShowUser({ user }: ShowUserProps) {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </AppLayout>
   )
 }
 

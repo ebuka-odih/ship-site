@@ -100,7 +100,7 @@ class AdminController extends Controller
     /**
      * Display a listing of users
      */
-    public function users()
+    public function index()
     {
         $users = User::latest()->paginate(10);
 
@@ -110,17 +110,33 @@ class AdminController extends Controller
     }
 
     /**
+     * Display a listing of users (alias for index)
+     */
+    public function users()
+    {
+        return $this->index();
+    }
+
+    /**
      * Show the form for creating a new user
      */
-    public function createUser()
+    public function create()
     {
         return Inertia::render('Admin/Users/Create');
     }
 
     /**
+     * Show the form for creating a new user (alias for create)
+     */
+    public function createUser()
+    {
+        return $this->create();
+    }
+
+    /**
      * Store a newly created user
      */
-    public function storeUser(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -137,14 +153,22 @@ class AdminController extends Controller
             'email_verified_at' => now(),
         ]);
 
-        return redirect()->route('admin.users')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User created successfully.');
+    }
+
+    /**
+     * Store a newly created user (alias for store)
+     */
+    public function storeUser(Request $request)
+    {
+        return $this->store($request);
     }
 
     /**
      * Display the specified user
      */
-    public function showUser(User $user)
+    public function show(User $user)
     {
         return Inertia::render('Admin/Users/Show', [
             'user' => $user,
@@ -152,9 +176,17 @@ class AdminController extends Controller
     }
 
     /**
+     * Display the specified user (alias for show)
+     */
+    public function showUser(User $user)
+    {
+        return $this->show($user);
+    }
+
+    /**
      * Show the form for editing the specified user
      */
-    public function editUser(User $user)
+    public function edit(User $user)
     {
         return Inertia::render('Admin/Users/Edit', [
             'user' => $user,
@@ -162,9 +194,17 @@ class AdminController extends Controller
     }
 
     /**
+     * Show the form for editing the specified user (alias for edit)
+     */
+    public function editUser(User $user)
+    {
+        return $this->edit($user);
+    }
+
+    /**
      * Update the specified user
      */
-    public function updateUser(Request $request, User $user)
+    public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -182,25 +222,41 @@ class AdminController extends Controller
             $user->update(['password' => bcrypt($request->password)]);
         }
 
-        return redirect()->route('admin.users')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * Update the specified user (alias for update)
+     */
+    public function updateUser(Request $request, User $user)
+    {
+        return $this->update($request, $user);
     }
 
     /**
      * Remove the specified user
      */
-    public function destroyUser(User $user)
+    public function destroy(User $user)
     {
         // Prevent admin from deleting themselves
         if ($user->id === auth()->id()) {
-            return redirect()->route('admin.users')
+            return redirect()->route('admin.users.index')
                 ->with('error', 'You cannot delete your own account.');
         }
 
         $user->delete();
 
-        return redirect()->route('admin.users')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Remove the specified user (alias for destroy)
+     */
+    public function destroyUser(User $user)
+    {
+        return $this->destroy($user);
     }
 
 }

@@ -455,7 +455,6 @@
             <div class="row align-items-center">
                 <div class="col-xl-7">
                     <ul class="tg-header__top-info tg-header__top-info-three left-side list-wrap">
-                        <li><i class="flaticon-location-1"></i>514 Kingsway Business Park, Manchester, M19 3WH, United Kingdom</li>
                         <li><i class="flaticon-envelope"></i><a
                                 href="mailto:support@shiphublogistics.com">support@shiphublogistics.com</a></li>
                         <li><i class="flaticon-time"></i>Mon – Sun: 9.00 am – 8.00pm</li>
@@ -591,10 +590,6 @@
                         <h4 class="footer__widget-title footer__widget-title-two">Information</h4>
                         <div class="footer__info-wrap footer__info-wrap-two">
                             <ul class="list-wrap">
-                                <li>
-                                    <i class="flaticon-location-1"></i>
-                                    <p>514 Kingsway Business Park, Manchester, M19 3WH, <br>United Kingdom</p>
-                                </li>
                                 <li>
                                     <i class="flaticon-envelope"></i>
                                     <a href="mailto:support@shiphublogistics.com">support@shiphublogistics.com</a>

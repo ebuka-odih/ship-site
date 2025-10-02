@@ -16,7 +16,7 @@
                                        placeholder="Enter tracking number (e.g., SH65A1B2C3D4E5F)" value="{{ request('tracking_number') }}">
                                 <button type="submit" class="tracking__btn">TRACK RESULT</button>
                             </div>
-                            <p class="tracking__example">Try tracking numbers from your shipments (e.g., SH65A1B2C3D4E5F)</p>
+                            <p class="tracking__example">Enter your tracking number to view shipment details and history</p>
                         </form>
                     </div>
 
@@ -160,6 +160,35 @@
                                     <span class="details__label">Departure Time :</span>
                                     <span class="details__value">{{ $trackingData['shipment_details']['departure_time'] }}</span>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Tracking History -->
+                        <div class="tracking__history">
+                            <h4 class="history__title">Tracking History</h4>
+                            <div class="history__table">
+                                <table class="history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date & Time</th>
+                                            <th>Status</th>
+                                            <th>Location</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($trackingData['tracking_history'] as $index => $event)
+                                        <tr class="{{ $index === 0 ? 'latest' : '' }}">
+                                            <td class="history__date">{{ $event['date'] }}</td>
+                                            <td class="history__status">
+                                                <span class="status-badge status-{{ strtolower(str_replace(' ', '-', $event['status'])) }}">
+                                                    {{ $event['status'] }}
+                                                </span>
+                                            </td>
+                                            <td class="history__location">{{ $event['location'] }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -605,6 +634,181 @@
     font-size: 14px;
     color: #333;
     font-weight: 600;
+}
+
+/* Tracking History Styles */
+.tracking__history {
+    margin-top: 30px;
+    border-top: 1px solid #e9ecef;
+    padding-top: 20px;
+}
+
+.history__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.history__table {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 14px;
+}
+
+.history-table thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.history-table th {
+    padding: 15px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-right: 1px solid #e9ecef;
+}
+
+.history-table th:last-child {
+    border-right: none;
+}
+
+.history-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.history-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.history-table tbody tr.latest {
+    background-color: #e8f5e8;
+    border-left: 4px solid #28a745;
+}
+
+.history-table tbody tr.latest:hover {
+    background-color: #d4edda;
+}
+
+.history-table td {
+    padding: 15px 20px;
+    vertical-align: middle;
+    border-right: 1px solid #f0f0f0;
+}
+
+.history-table td:last-child {
+    border-right: none;
+}
+
+.history__date {
+    font-weight: 500;
+    color: #333;
+    font-size: 13px;
+}
+
+.history__status {
+    text-align: center;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+}
+
+.status-shipment-created {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-color: #bbdefb;
+}
+
+.status-package-picked-up {
+    background-color: #fff3e0;
+    color: #f57c00;
+    border-color: #ffcc02;
+}
+
+.status-in-transit {
+    background-color: #e8f5e8;
+    color: #388e3c;
+    border-color: #a5d6a7;
+}
+
+.status-delivered {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border-color: #81c784;
+}
+
+.status-expected-delivery {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+    border-color: #ce93d8;
+}
+
+.history__location {
+    color: #666;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Print styles for tracking history */
+@media print {
+    .tracking__history {
+        margin-top: 20px !important;
+        border-top: 1px solid #ddd !important;
+        padding-top: 15px !important;
+        page-break-inside: avoid !important;
+    }
+    
+    .history__title {
+        font-size: 14px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .history-table {
+        font-size: 10px !important;
+    }
+    
+    .history-table th {
+        padding: 8px 12px !important;
+        font-size: 10px !important;
+    }
+    
+    .history-table td {
+        padding: 8px 12px !important;
+    }
+    
+    .history__date {
+        font-size: 10px !important;
+    }
+    
+    .status-badge {
+        padding: 4px 8px !important;
+        font-size: 9px !important;
+    }
+    
+    .history__location {
+        font-size: 10px !important;
+    }
 }
 
 /* Tracking Not Found Styles */

@@ -59,10 +59,26 @@ class ContactController extends Controller
                 'submittedAt' => now()->format('M j, Y \a\t g:i A'),
             ];
 
-            // For now, skip email sending to avoid template issues
-            // We'll add email functionality later once the basic form works
-            \Log::info('Email would be sent to: ' . $companyEmail);
-            \Log::info('Confirmation email would be sent to: ' . $validatedData['email']);
+            // Send emails to admin and customer
+            try {
+                // Send email to admin (company email from settings)
+                Mail::raw($this->getAdminEmailContent($emailData), function ($message) use ($companyEmail, $companyName, $validatedData) {
+                    $message->to($companyEmail, $companyName)
+                            ->subject('New Contact Form Submission - ' . $validatedData['name'])
+                            ->replyTo($validatedData['email'], $validatedData['name']);
+                });
+
+                // Send confirmation email to customer
+                Mail::raw($this->getCustomerEmailContent($emailData), function ($message) use ($validatedData, $companyName) {
+                    $message->to($validatedData['email'], $validatedData['name'])
+                            ->subject('Thank you for contacting ' . $companyName);
+                });
+
+                \Log::info('Emails sent successfully to admin: ' . $companyEmail . ' and customer: ' . $validatedData['email']);
+            } catch (\Exception $emailError) {
+                // Log email error but don't fail the form submission
+                \Log::warning('Email sending failed: ' . $emailError->getMessage());
+            }
 
             // Always log the contact form submission
             \Log::info('Contact form submission received:', [
@@ -87,5 +103,70 @@ class ContactController extends Controller
                 'message' => 'Sorry, there was an error processing your message. Please try again or contact us directly.'
             ], 500);
         }
+    }
+
+    /**
+     * Generate admin email content
+     */
+    private function getAdminEmailContent($emailData)
+    {
+        return "
+NEW CONTACT FORM SUBMISSION
+
+You have received a new contact form submission from your website:
+
+Name: {$emailData['name']}
+Email: {$emailData['email']}
+Phone: {$emailData['phone']}
+Service Required: {$emailData['service']}
+Submitted: {$emailData['submittedAt']}
+
+Message:
+{$emailData['message']}
+
+---
+Next Steps:
+- Reply directly to this email to respond to the customer
+- Or call the customer at: {$emailData['phone']}
+- Follow up within 24 hours as promised
+
+This email was automatically generated from your website contact form.
+        ";
+    }
+
+    /**
+     * Generate customer confirmation email content
+     */
+    private function getCustomerEmailContent($emailData)
+    {
+        return "
+Dear {$emailData['name']},
+
+Thank you for contacting {$emailData['companyName']}!
+
+We have received your inquiry and our logistics team will review your requirements and get back to you within 24 hours.
+
+Your Inquiry Details:
+- Service Required: {$emailData['service']}
+- Submitted: {$emailData['submittedAt']}
+- Your Message: {$emailData['message']}
+
+What Happens Next?
+- Our logistics experts will review your requirements
+- We'll prepare a customized quote for your shipping needs
+- One of our specialists will contact you within 24 hours
+- We'll discuss the best shipping solution for your business
+
+Need Immediate Assistance?
+If you have urgent shipping requirements, please don't hesitate to call us directly.
+
+We look forward to helping you with your shipping needs!
+
+Best regards,
+The {$emailData['companyName']} Team
+
+---
+This is an automated confirmation email. Please do not reply to this message.
+        ";
     }
 }

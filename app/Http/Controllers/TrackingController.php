@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shipment;
+use App\Models\ShipmentHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -76,44 +77,24 @@ class TrackingController extends Controller
     {
         $history = [];
         
-        // Add initial status
-        $history[] = [
-            'date' => $shipment->created_at->format('Y-m-d H:i A'),
-            'status' => 'Shipment created',
-            'location' => $shipment->origin ?? 'Origin'
-        ];
+        // Get real history from database
+        $shipmentHistories = $shipment->histories()->orderBy('created_at', 'desc')->get();
         
-        // Add pickup if scheduled
-        if ($shipment->pickup_date) {
-            $pickupDateTime = $shipment->pickup_date . ' ' . ($shipment->pickup_time ?? '09:00');
+        if ($shipmentHistories->count() > 0) {
+            // Use real history from database
+            foreach ($shipmentHistories as $historyItem) {
+                $history[] = [
+                    'date' => $historyItem->created_at->format('Y-m-d H:i A'),
+                    'status' => $historyItem->status,
+                    'location' => $historyItem->location ?? 'N/A'
+                ];
+            }
+        } else {
+            // If no history exists, show only the initial creation
             $history[] = [
-                'date' => $pickupDateTime,
-                'status' => 'Package picked up',
+                'date' => $shipment->created_at->format('Y-m-d H:i A'),
+                'status' => 'Shipment created',
                 'location' => $shipment->origin ?? 'Origin'
-            ];
-        }
-        
-        // Add status changes based on current status
-        if ($shipment->status === 'in_transit') {
-            $history[] = [
-                'date' => $shipment->updated_at->format('Y-m-d H:i A'),
-                'status' => 'In transit',
-                'location' => $shipment->destination ?? 'In transit'
-            ];
-        } elseif ($shipment->status === 'delivered') {
-            $history[] = [
-                'date' => $shipment->updated_at->format('Y-m-d H:i A'),
-                'status' => 'Delivered',
-                'location' => $shipment->destination ?? 'Destination'
-            ];
-        }
-        
-        // Add expected delivery if set
-        if ($shipment->expected_delivery_date) {
-            $history[] = [
-                'date' => $shipment->expected_delivery_date->format('Y-m-d H:i A'),
-                'status' => 'Expected delivery',
-                'location' => $shipment->destination ?? 'Destination'
             ];
         }
         

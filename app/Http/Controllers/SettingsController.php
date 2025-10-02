@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,22 +15,25 @@ class SettingsController extends Controller
     {
         $settings = [
             'company' => [
-                'name' => config('app.name', 'ShipTrack'),
-                'email' => config('mail.from.address', 'noreply@shiptrack.com'),
-                'phone' => '+1 (555) 123-4567',
-                'address' => '123 Shipping Street, Logistics City, LC 12345',
-                'website' => 'www.shiptrack.com',
+                'name' => Setting::get('company_name', config('app.name', 'ShipSite')),
+                'email' => Setting::get('company_email', config('mail.from.address', 'noreply@shiptrack.com')),
+                'phone' => Setting::get('company_phone', '+1 (555) 123-4567'),
+                'address' => Setting::get('company_address', '123 Shipping Street, Logistics City, LC 12345'),
+                'website' => Setting::get('company_website', 'www.shiptrack.com'),
             ],
             'mail' => [
-                'driver' => config('mail.default'),
-                'host' => config('mail.mailers.smtp.host'),
-                'port' => config('mail.mailers.smtp.port'),
-                'encryption' => config('mail.mailers.smtp.encryption'),
+                'driver' => Setting::get('mail_driver', config('mail.default')),
+                'host' => Setting::get('mail_host', config('mail.mailers.smtp.host')),
+                'port' => Setting::get('mail_port', config('mail.mailers.smtp.port')),
+                'encryption' => Setting::get('mail_encryption', config('mail.mailers.smtp.encryption')),
             ],
             'system' => [
                 'timezone' => config('app.timezone'),
                 'locale' => config('app.locale'),
                 'debug' => config('app.debug'),
+            ],
+            'livechat' => [
+                'script' => Setting::get('livechat_script', ''),
             ]
         ];
 
@@ -48,11 +52,16 @@ class SettingsController extends Controller
             'company_email' => 'required|email|max:255',
             'company_phone' => 'required|string|max:20',
             'company_address' => 'required|string',
-            'company_website' => 'required|string|max:255',
+            'company_website' => 'nullable|string|max:255',
         ]);
 
-        // In a real application, you would save these to a settings table
-        // For now, we'll just return success
+        // Save settings to database
+        Setting::set('company_name', $request->company_name);
+        Setting::set('company_email', $request->company_email);
+        Setting::set('company_phone', $request->company_phone);
+        Setting::set('company_address', $request->company_address);
+        Setting::set('company_website', $request->company_website);
+
         return redirect()->route('admin.settings')
             ->with('success', 'General settings updated successfully.');
     }
@@ -71,9 +80,32 @@ class SettingsController extends Controller
             'mail_password' => 'required|string|max:255',
         ]);
 
-        // In a real application, you would save these to a settings table
+        // Save mail settings to database
+        Setting::set('mail_driver', $request->mail_driver);
+        Setting::set('mail_host', $request->mail_host);
+        Setting::set('mail_port', $request->mail_port);
+        Setting::set('mail_encryption', $request->mail_encryption);
+        Setting::set('mail_username', $request->mail_username);
+        Setting::set('mail_password', $request->mail_password);
+
         return redirect()->route('admin.settings')
             ->with('success', 'Mail settings updated successfully.');
+    }
+
+    /**
+     * Update livechat settings
+     */
+    public function updateLivechat(Request $request)
+    {
+        $request->validate([
+            'livechat_script' => 'nullable|string',
+        ]);
+
+        // Save livechat script to database
+        Setting::set('livechat_script', $request->livechat_script);
+
+        return redirect()->route('admin.settings')
+            ->with('success', 'Livechat settings updated successfully.');
     }
 
     /**

@@ -18,7 +18,14 @@ class AdminController extends Controller
             'total_users' => User::where('role', 'user')->count(),
             'total_admins' => User::where('role', 'admin')->count(),
             'total_shipments' => Shipment::count(),
-            'active_shipments' => Shipment::whereIn('status', ['pending', 'in_transit'])->count(),
+            'active_shipments' => Shipment::whereIn('status', ['in_transit', 'out_for_delivery'])->count(),
+            'pending_shipments' => Shipment::where('status', 'pending')->count(),
+            'delivered_shipments' => Shipment::where('status', 'delivered')->count(),
+            'total_revenue' => Shipment::sum('value') ?? 0,
+            'monthly_revenue' => Shipment::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('value') ?? 0,
+            'user_growth' => $this->calculateUserGrowth(),
             'recent_users' => User::where('role', 'user')
                 ->latest()
                 ->take(5)
@@ -28,6 +35,26 @@ class AdminController extends Controller
         return Inertia::render('Admin/Dashboard', [
             'stats' => $stats,
         ]);
+    }
+
+    /**
+     * Calculate user growth percentage
+     */
+    private function calculateUserGrowth()
+    {
+        $currentMonth = User::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+            
+        $lastMonth = User::whereMonth('created_at', now()->subMonth()->month)
+            ->whereYear('created_at', now()->subMonth()->year)
+            ->count();
+            
+        if ($lastMonth == 0) {
+            return $currentMonth > 0 ? 100 : 0;
+        }
+        
+        return round((($currentMonth - $lastMonth) / $lastMonth) * 100);
     }
 
     /**

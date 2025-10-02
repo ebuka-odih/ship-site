@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AppLayout from '@/layouts/app-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -90,15 +90,15 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
   }
 
   return (
-    <AdminLayout>
+    <AppLayout>
       <Head title="Shipments Management" />
       
-      <div className="space-y-6">
+      <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">Shipments</h1>
-            <p className="text-slate-300">Manage and track all shipments</p>
+            <h1 className="text-3xl font-bold tracking-tight">Shipments</h1>
+            <p className="text-muted-foreground">Manage and track all shipments</p>
           </div>
           <Button asChild>
             <Link href="/admin/shipments/create">
@@ -109,34 +109,34 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
         </div>
 
         {/* Shipments Table */}
-        <Card className="bg-slate-700 border-slate-600">
-          <CardHeader>
-            <CardTitle className="text-white">All Shipments</CardTitle>
-            <CardDescription className="text-slate-300">
+        <Card className="p-4">
+          <CardHeader className="px-0 pt-0">
+            <CardTitle className="text-base">All Shipments</CardTitle>
+            <CardDescription className="text-sm">
               A list of all shipments in the system with their current status and tracking information.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-0">
             <Table>
               <TableHeader>
-                <TableRow className="border-slate-600">
-                  <TableHead className="text-slate-300">Tracking</TableHead>
-                  <TableHead className="text-slate-300">Status</TableHead>
-                  <TableHead className="text-slate-300">Receiver</TableHead>
-                  <TableHead className="text-slate-300">Sender</TableHead>
-                  <TableHead className="text-slate-300">Created</TableHead>
-                  <TableHead className="text-right text-slate-300">Actions</TableHead>
+                <TableRow>
+                  <TableHead>Tracking</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Receiver</TableHead>
+                  <TableHead>Sender</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {shipments.data.map((shipment) => (
-                  <TableRow key={shipment.id} className="border-slate-600 hover:bg-slate-600">
+                  <TableRow key={shipment.id}>
                     <TableCell>
                       <div className="flex items-center space-x-2">
-                        <Package className="h-4 w-4 text-slate-400" />
+                        <Package className="h-4 w-4 text-muted-foreground" />
                         <div>
-                          <div className="font-medium text-white">{shipment.tracking_number}</div>
-                          <div className="text-sm text-slate-400">
+                          <div className="font-medium">{shipment.tracking_number}</div>
+                          <div className="text-sm text-muted-foreground">
                             {new Date(shipment.created_at).toLocaleDateString()}
                           </div>
                         </div>
@@ -149,10 +149,10 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
                     </TableCell>
                     <TableCell>
                       <div>
-                        <div className="font-medium text-white">{shipment.receiver_name}</div>
-                        <div className="text-xs text-slate-400">{shipment.receiver_email}</div>
+                        <div className="font-medium">{shipment.receiver_name}</div>
+                        <div className="text-xs text-muted-foreground">{shipment.receiver_email}</div>
                         {shipment.expected_delivery_date && (
-                          <div className="flex items-center space-x-1 text-sm text-slate-400 mt-1">
+                          <div className="flex items-center space-x-1 text-sm text-muted-foreground mt-1">
                             <Clock className="h-3 w-3" />
                             <span>ETA: {new Date(shipment.expected_delivery_date).toLocaleDateString()}</span>
                           </div>
@@ -161,26 +161,26 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
                     </TableCell>
                     <TableCell>
                       <div>
-                        <div className="font-medium text-white">{shipment.shipper_name}</div>
-                        <div className="text-xs text-slate-400">{shipment.shipper_email}</div>
+                        <div className="font-medium">{shipment.shipper_name}</div>
+                        <div className="text-xs text-muted-foreground">{shipment.shipper_email}</div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-slate-300">
+                    <TableCell className="text-muted-foreground">
                       {new Date(shipment.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end space-x-2">
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white hover:bg-slate-600">
+                        <Button variant="ghost" size="sm" asChild>
                           <Link href={`/admin/shipments/${shipment.id}`}>
                             <Eye className="h-4 w-4" />
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white hover:bg-slate-600">
+                        <Button variant="ghost" size="sm" asChild>
                           <Link href={`/admin/shipments/${shipment.id}/edit`}>
                             <Edit className="h-4 w-4" />
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300 hover:bg-slate-600">
+                        <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -193,7 +193,7 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
             {/* Pagination */}
             {shipments.links.length > 3 && (
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm text-slate-400">
+                <div className="text-sm text-muted-foreground">
                   Showing {shipments.meta.per_page * (shipments.meta.current_page - 1) + 1} to{' '}
                   {Math.min(shipments.meta.per_page * shipments.meta.current_page, shipments.meta.total)} of{' '}
                   {shipments.meta.total} results
@@ -206,7 +206,7 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
                       size="sm"
                       asChild={!!link.url}
                       disabled={!link.url}
-                      className={link.active ? 'bg-slate-600 text-white' : 'border-slate-500 text-slate-300 hover:bg-slate-600'}
+                      className={link.active ? '' : ''}
                     >
                       {link.url ? (
                         <Link href={link.url}>
@@ -223,6 +223,6 @@ export default function ShipmentsIndex({ shipments }: ShipmentsIndexProps) {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </AppLayout>
   )
 }

@@ -6,7 +6,7 @@ use App\Http\Controllers\ShipmentPdfController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     
     // User management routes
@@ -42,6 +42,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings/general', [SettingsController::class, 'updateGeneral'])->name('settings.general');
     Route::post('/settings/mail', [SettingsController::class, 'updateMail'])->name('settings.mail');
+    Route::post('/settings/livechat', [SettingsController::class, 'updateLivechat'])->name('settings.livechat');
     Route::post('/settings/test-mail', [SettingsController::class, 'testMail'])->name('settings.test-mail');
 });
 

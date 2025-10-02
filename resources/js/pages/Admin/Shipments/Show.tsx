@@ -1,6 +1,6 @@
 import React from 'react'
 import { Head, useForm, router } from '@inertiajs/react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AppLayout from '@/layouts/app-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -127,7 +127,7 @@ function AddHistoryModal({
             <Plus className="h-5 w-5" />
             <span>Add New Status Update</span>
           </DialogTitle>
-          <DialogDescription className="text-slate-300">
+          <DialogDescription className="text-muted-foreground">
             Add a new status update to track the shipment's progress
           </DialogDescription>
         </DialogHeader>
@@ -141,21 +141,21 @@ function AddHistoryModal({
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-700 border-slate-600">
-                  <SelectItem value="pending" className="text-white">Pending</SelectItem>
-                  <SelectItem value="confirmed" className="text-white">Confirmed</SelectItem>
-                  <SelectItem value="processing" className="text-white">Processing</SelectItem>
-                  <SelectItem value="picked_up" className="text-white">Picked Up</SelectItem>
-                  <SelectItem value="in_transit" className="text-white">In Transit</SelectItem>
-                  <SelectItem value="out_for_delivery" className="text-white">Out for Delivery</SelectItem>
-                  <SelectItem value="delivery_attempted" className="text-white">Delivery Attempted</SelectItem>
-                  <SelectItem value="delivered" className="text-white">Delivered</SelectItem>
-                  <SelectItem value="returned" className="text-white">Returned</SelectItem>
-                  <SelectItem value="cancelled" className="text-white">Cancelled</SelectItem>
-                  <SelectItem value="on_hold" className="text-white">On Hold</SelectItem>
-                  <SelectItem value="exception" className="text-white">Exception</SelectItem>
+                  <SelectItem value="pending" className="">Pending</SelectItem>
+                  <SelectItem value="confirmed" className="">Confirmed</SelectItem>
+                  <SelectItem value="processing" className="">Processing</SelectItem>
+                  <SelectItem value="picked_up" className="">Picked Up</SelectItem>
+                  <SelectItem value="in_transit" className="">In Transit</SelectItem>
+                  <SelectItem value="out_for_delivery" className="">Out for Delivery</SelectItem>
+                  <SelectItem value="delivery_attempted" className="">Delivery Attempted</SelectItem>
+                  <SelectItem value="delivered" className="">Delivered</SelectItem>
+                  <SelectItem value="returned" className="">Returned</SelectItem>
+                  <SelectItem value="cancelled" className="">Cancelled</SelectItem>
+                  <SelectItem value="on_hold" className="">On Hold</SelectItem>
+                  <SelectItem value="exception" className="">Exception</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.status && <p className="text-red-400 text-sm mt-1">{errors.status}</p>}
+              {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
             </div>
             <div>
               <Label htmlFor="location" className="text-sm font-medium text-white">Location</Label>
@@ -167,7 +167,7 @@ function AddHistoryModal({
                 className="bg-slate-600 border-slate-500 text-white placeholder:text-slate-400"
                 placeholder="Enter location (optional)"
               />
-              {errors.location && <p className="text-red-400 text-sm mt-1">{errors.location}</p>}
+              {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
             </div>
           </div>
 
@@ -182,7 +182,7 @@ function AddHistoryModal({
                 onChange={(e) => setData('created_date', e.target.value)}
                 className="bg-slate-600 border-slate-500 text-white placeholder:text-slate-400"
               />
-              {errors.created_date && <p className="text-red-400 text-sm mt-1">{errors.created_date}</p>}
+              {errors.created_date && <p className="text-red-500 text-sm mt-1">{errors.created_date}</p>}
             </div>
             <div>
               <Label htmlFor="created_time" className="text-sm font-medium text-white">Time</Label>
@@ -193,7 +193,7 @@ function AddHistoryModal({
                 onChange={(e) => setData('created_time', e.target.value)}
                 className="bg-slate-600 border-slate-500 text-white placeholder:text-slate-400"
               />
-              {errors.created_time && <p className="text-red-400 text-sm mt-1">{errors.created_time}</p>}
+              {errors.created_time && <p className="text-red-500 text-sm mt-1">{errors.created_time}</p>}
             </div>
           </div>
 
@@ -208,7 +208,7 @@ function AddHistoryModal({
               className="bg-slate-600 border-slate-500 text-white placeholder:text-slate-400"
               placeholder="Enter who updated this (optional)"
             />
-            {errors.updated_by && <p className="text-red-400 text-sm mt-1">{errors.updated_by}</p>}
+            {errors.updated_by && <p className="text-red-500 text-sm mt-1">{errors.updated_by}</p>}
           </div>
 
           {/* Note Field */}
@@ -222,14 +222,14 @@ function AddHistoryModal({
               placeholder="Enter additional notes (optional)"
               rows={3}
             />
-            {errors.note && <p className="text-red-400 text-sm mt-1">{errors.note}</p>}
+            {errors.note && <p className="text-red-500 text-sm mt-1">{errors.note}</p>}
           </div>
           <div className="flex justify-end space-x-2">
             <Button 
               type="button" 
               variant="outline" 
               onClick={() => onOpenChange(false)}
-              className="border-slate-500 text-slate-300 hover:bg-slate-700"
+              className=""
             >
               Cancel
             </Button>
@@ -384,10 +384,10 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
   }
 
   return (
-    <AdminLayout>
+    <AppLayout>
       <Head title={`Shipment Details - ${shipment.tracking_number}`} />
       
-      <div className="space-y-6">
+      <div className="p-6 space-y-6">
         {/* Header */}
         <div className="space-y-4">
           {/* Top row - Back button and title */}
@@ -398,8 +398,8 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
               </Link>
             </Button>
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-white truncate">Shipment Details</h1>
-              <p className="text-sm sm:text-base text-slate-300 truncate">Tracking number: {shipment.tracking_number}</p>
+              <h1 className="text-3xl font-bold tracking-tight truncate">Shipment Details</h1>
+              <p className="text-muted-foreground truncate">Tracking number: {shipment.tracking_number}</p>
             </div>
           </div>
           
@@ -431,7 +431,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-slate-500 text-slate-300 hover:bg-slate-700"
+                className=""
                 onClick={() => window.open(`/admin/shipments/${shipment.id}/pdf`, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
                 <FileText className="h-4 w-4 mr-2" />
@@ -441,7 +441,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-slate-500 text-slate-300 hover:bg-slate-700"
+                className=""
                 onClick={() => window.open(`/admin/shipments/${shipment.id}/label`, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
                 <Download className="h-4 w-4 mr-2" />
@@ -451,7 +451,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-slate-500 text-slate-300 hover:bg-slate-700"
+                className=""
                 onClick={() => window.open(`/admin/shipments/${shipment.id}/invoice`, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
                 <Receipt className="h-4 w-4 mr-2" />
@@ -466,13 +466,13 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Status and Overview */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <Package className="h-5 w-5 text-blue-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <Package className="h-5 w-5 text-blue-500" />
                   <span>Shipment Overview</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Current status and basic information
                 </CardDescription>
               </CardHeader>
@@ -484,100 +484,100 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                         const StatusIcon = getStatusIcon(shipment.status)
                         return <StatusIcon className={`h-5 w-5 ${getStatusIconColor(shipment.status)}`} />
                       })()}
-                      <span className="text-white font-medium">Status</span>
+                      <span className="font-medium">Status</span>
                     </div>
                     <Badge variant={getStatusBadgeVariant(shipment.status)} className={getStatusColor(shipment.status)}>
                       {shipment.status.replace('_', ' ').toUpperCase()}
                     </Badge>
                   </div>
-                  <div className="text-sm text-slate-400">
+                  <div className="text-sm text-muted-foreground">
                     Created {new Date(shipment.created_at).toLocaleDateString()}
                   </div>
                 </div>
 
                 {shipment.comments && (
                   <div>
-                    <h4 className="text-sm font-medium text-white mb-2">Comments</h4>
-                    <p className="text-slate-300">{shipment.comments}</p>
+                    <h4 className="text-sm font-medium mb-2">Comments</h4>
+                    <p className="text-muted-foreground">{shipment.comments}</p>
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {/* Shipper Information */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <Package className="h-5 w-5 text-green-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <Package className="h-5 w-5 text-green-500" />
                   <span>Shipper Information</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Details about the person/company sending the shipment
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-sm font-medium text-white mb-1">Name</div>
-                    <div className="text-slate-300">{shipment.shipper_name}</div>
+                    <div className="text-sm font-medium mb-1">Name</div>
+                    <div className="text-muted-foreground">{shipment.shipper_name}</div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white mb-1">Phone</div>
-                    <div className="text-slate-300">{shipment.shipper_phone}</div>
+                    <div className="text-sm font-medium mb-1">Phone</div>
+                    <div className="text-muted-foreground">{shipment.shipper_phone}</div>
                   </div>
                   <div className="md:col-span-2">
-                    <div className="text-sm font-medium text-white mb-1">Email</div>
-                    <div className="text-slate-300">{shipment.shipper_email}</div>
+                    <div className="text-sm font-medium mb-1">Email</div>
+                    <div className="text-muted-foreground">{shipment.shipper_email}</div>
                   </div>
                   <div className="md:col-span-2">
-                    <div className="text-sm font-medium text-white mb-1">Address</div>
-                    <div className="text-slate-300">{shipment.shipper_address}</div>
+                    <div className="text-sm font-medium mb-1">Address</div>
+                    <div className="text-muted-foreground">{shipment.shipper_address}</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Receiver Information */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <User className="h-5 w-5 text-blue-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <User className="h-5 w-5 text-blue-500" />
                   <span>Receiver Information</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Details about the person/company receiving the shipment
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-sm font-medium text-white mb-1">Name</div>
-                    <div className="text-slate-300">{shipment.receiver_name}</div>
+                    <div className="text-sm font-medium mb-1">Name</div>
+                    <div className="text-muted-foreground">{shipment.receiver_name}</div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white mb-1">Phone</div>
-                    <div className="text-slate-300">{shipment.receiver_phone}</div>
+                    <div className="text-sm font-medium mb-1">Phone</div>
+                    <div className="text-muted-foreground">{shipment.receiver_phone}</div>
                   </div>
                   <div className="md:col-span-2">
-                    <div className="text-sm font-medium text-white mb-1">Email</div>
-                    <div className="text-slate-300">{shipment.receiver_email}</div>
+                    <div className="text-sm font-medium mb-1">Email</div>
+                    <div className="text-muted-foreground">{shipment.receiver_email}</div>
                   </div>
                   <div className="md:col-span-2">
-                    <div className="text-sm font-medium text-white mb-1">Address</div>
-                    <div className="text-slate-300">{shipment.receiver_address}</div>
+                    <div className="text-sm font-medium mb-1">Address</div>
+                    <div className="text-muted-foreground">{shipment.receiver_address}</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Shipment Details */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <Package className="h-5 w-5 text-purple-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <Package className="h-5 w-5 text-purple-500" />
                   <span>Shipment Details</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Information about the shipment and package
                 </CardDescription>
               </CardHeader>
@@ -585,50 +585,50 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {shipment.agent_name && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Agent Name</div>
-                      <div className="text-slate-300">{shipment.agent_name}</div>
+                      <div className="text-sm font-medium mb-1">Agent Name</div>
+                      <div className="text-muted-foreground">{shipment.agent_name}</div>
                     </div>
                   )}
                   {shipment.type_of_shipment && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Type of Shipment</div>
-                      <div className="text-slate-300">{shipment.type_of_shipment}</div>
+                      <div className="text-sm font-medium mb-1">Type of Shipment</div>
+                      <div className="text-muted-foreground">{shipment.type_of_shipment}</div>
                     </div>
                   )}
                   {shipment.weight && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Weight</div>
-                      <div className="text-slate-300">{shipment.weight}</div>
+                      <div className="text-sm font-medium mb-1">Weight</div>
+                      <div className="text-muted-foreground">{shipment.weight}</div>
                     </div>
                   )}
                   {shipment.courier && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Courier</div>
-                      <div className="text-slate-300">{shipment.courier}</div>
+                      <div className="text-sm font-medium mb-1">Courier</div>
+                      <div className="text-muted-foreground">{shipment.courier}</div>
                     </div>
                   )}
                   {shipment.packages && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Packages</div>
-                      <div className="text-slate-300">{shipment.packages}</div>
+                      <div className="text-sm font-medium mb-1">Packages</div>
+                      <div className="text-muted-foreground">{shipment.packages}</div>
                     </div>
                   )}
                   {shipment.mode && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Mode</div>
-                      <div className="text-slate-300">{shipment.mode}</div>
+                      <div className="text-sm font-medium mb-1">Mode</div>
+                      <div className="text-muted-foreground">{shipment.mode}</div>
                     </div>
                   )}
                   {shipment.product && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Product</div>
-                      <div className="text-slate-300">{shipment.product}</div>
+                      <div className="text-sm font-medium mb-1">Product</div>
+                      <div className="text-muted-foreground">{shipment.product}</div>
                     </div>
                   )}
                   {shipment.quantity && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Quantity</div>
-                      <div className="text-slate-300">{shipment.quantity}</div>
+                      <div className="text-sm font-medium mb-1">Quantity</div>
+                      <div className="text-muted-foreground">{shipment.quantity}</div>
                     </div>
                   )}
                 </div>
@@ -636,13 +636,13 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
             </Card>
 
             {/* Payment & Freight */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <DollarSign className="h-5 w-5 text-yellow-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <DollarSign className="h-5 w-5 text-yellow-500" />
                   <span>Payment & Freight</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Payment and freight information
                 </CardDescription>
               </CardHeader>
@@ -650,14 +650,14 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {shipment.payment_mode && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Payment Mode</div>
-                      <div className="text-slate-300">{shipment.payment_mode}</div>
+                      <div className="text-sm font-medium mb-1">Payment Mode</div>
+                      <div className="text-muted-foreground">{shipment.payment_mode}</div>
                     </div>
                   )}
                   {shipment.total_freight && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Total Freight</div>
-                      <div className="text-slate-300">{shipment.total_freight}</div>
+                      <div className="text-sm font-medium mb-1">Total Freight</div>
+                      <div className="text-muted-foreground">{shipment.total_freight}</div>
                     </div>
                   )}
                 </div>
@@ -665,13 +665,13 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
             </Card>
 
             {/* Carrier Information */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <Package className="h-5 w-5 text-orange-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <Package className="h-5 w-5 text-orange-500" />
                   <span>Carrier Information</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Carrier and reference details
                 </CardDescription>
               </CardHeader>
@@ -679,14 +679,14 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {shipment.carrier && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Carrier</div>
-                      <div className="text-slate-300">{shipment.carrier}</div>
+                      <div className="text-sm font-medium mb-1">Carrier</div>
+                      <div className="text-muted-foreground">{shipment.carrier}</div>
                     </div>
                   )}
                   {shipment.carrier_reference_no && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Carrier Reference No.</div>
-                      <div className="text-slate-300">{shipment.carrier_reference_no}</div>
+                      <div className="text-sm font-medium mb-1">Carrier Reference No.</div>
+                      <div className="text-muted-foreground">{shipment.carrier_reference_no}</div>
                     </div>
                   )}
                 </div>
@@ -694,13 +694,13 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
             </Card>
 
             {/* Timing Information */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <MapPin className="h-5 w-5 text-red-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <MapPin className="h-5 w-5 text-red-500" />
                   <span>Timing Information</span>
                 </CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription className="text-muted-foreground">
                   Dates, times, and locations
                 </CardDescription>
               </CardHeader>
@@ -708,38 +708,38 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {shipment.origin && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Origin</div>
-                      <div className="text-slate-300">{shipment.origin}</div>
+                      <div className="text-sm font-medium mb-1">Origin</div>
+                      <div className="text-muted-foreground">{shipment.origin}</div>
                     </div>
                   )}
                   {shipment.destination && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Destination</div>
-                      <div className="text-slate-300">{shipment.destination}</div>
+                      <div className="text-sm font-medium mb-1">Destination</div>
+                      <div className="text-muted-foreground">{shipment.destination}</div>
                     </div>
                   )}
                   {shipment.pickup_date && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Pickup Date</div>
-                      <div className="text-slate-300">{new Date(shipment.pickup_date).toLocaleDateString()}</div>
+                      <div className="text-sm font-medium mb-1">Pickup Date</div>
+                      <div className="text-muted-foreground">{new Date(shipment.pickup_date).toLocaleDateString()}</div>
                     </div>
                   )}
                   {shipment.pickup_time && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Pickup Time</div>
-                      <div className="text-slate-300">{shipment.pickup_time}</div>
+                      <div className="text-sm font-medium mb-1">Pickup Time</div>
+                      <div className="text-muted-foreground">{shipment.pickup_time}</div>
                     </div>
                   )}
                   {shipment.departure_time && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Departure Time</div>
-                      <div className="text-slate-300">{shipment.departure_time}</div>
+                      <div className="text-sm font-medium mb-1">Departure Time</div>
+                      <div className="text-muted-foreground">{shipment.departure_time}</div>
                     </div>
                   )}
                   {shipment.expected_delivery_date && (
                     <div>
-                      <div className="text-sm font-medium text-white mb-1">Expected Delivery Date</div>
-                      <div className="text-slate-300">{new Date(shipment.expected_delivery_date).toLocaleDateString()}</div>
+                      <div className="text-sm font-medium mb-1">Expected Delivery Date</div>
+                      <div className="text-muted-foreground">{new Date(shipment.expected_delivery_date).toLocaleDateString()}</div>
                     </div>
                   )}
                 </div>
@@ -751,10 +751,10 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Customer Information */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <User className="h-5 w-5 text-indigo-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <User className="h-5 w-5 text-indigo-500" />
                   <span>Customer</span>
                 </CardTitle>
               </CardHeader>
@@ -775,10 +775,10 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
             </Card>
 
             {/* Quick Stats */}
-            <Card className="bg-slate-700 border-slate-600 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                  <Package className="h-5 w-5 text-cyan-400" />
+            <Card className="p-4">
+              <CardHeader className="px-0 pt-0 pb-4">
+                <CardTitle className="text-base flex items-center space-x-2">
+                  <Package className="h-5 w-5 text-cyan-500" />
                   <span>Quick Info</span>
                 </CardTitle>
               </CardHeader>
@@ -810,13 +810,13 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
 
         {/* Shipment History Management - Full Width */}
         <div className="mt-6">
-          <Card className="bg-slate-700 border-slate-600 shadow-lg">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-white flex items-center space-x-2 text-lg">
-                <Clock className="h-5 w-5 text-cyan-400" />
+          <Card className="p-4">
+            <CardHeader className="px-0 pt-0 pb-4">
+              <CardTitle className="text-base flex items-center space-x-2">
+                <Clock className="h-5 w-5 text-cyan-500" />
                 <span>Shipment History</span>
               </CardTitle>
-              <CardDescription className="text-slate-300">
+              <CardDescription className="text-muted-foreground">
                 Manage shipment status updates and tracking events
               </CardDescription>
             </CardHeader>
@@ -853,7 +853,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                         {shipment.histories.map((history) => (
                           <TableRow key={history.id} className="border-slate-600 hover:bg-slate-700 bg-slate-800">
                             {/* Date Column */}
-                            <TableCell className="text-slate-300">
+                            <TableCell className="text-muted-foreground">
                               {new Date(history.created_at).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -862,7 +862,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                             </TableCell>
                             
                             {/* Time Column */}
-                            <TableCell className="text-slate-300">
+                            <TableCell className="text-muted-foreground">
                               {new Date(history.created_at).toLocaleTimeString('en-US', {
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -871,12 +871,12 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                             </TableCell>
                             
                             {/* Location Column */}
-                            <TableCell className="text-slate-300">
+                            <TableCell className="text-muted-foreground">
                               {history.location || '-'}
                             </TableCell>
                             
                             {/* Status Column */}
-                            <TableCell className="text-slate-300">
+                            <TableCell className="text-muted-foreground">
                               <div className="flex items-center space-x-2">
                                 <div className="w-6 h-6 bg-slate-600 rounded-full flex items-center justify-center">
                                   {(() => {
@@ -891,12 +891,12 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                             </TableCell>
                             
                             {/* Updated By Column */}
-                            <TableCell className="text-slate-300">
+                            <TableCell className="text-muted-foreground">
                               {history.updated_by || '-'}
                             </TableCell>
                             
                             {/* Remarks Column */}
-                            <TableCell className="text-slate-300">
+                            <TableCell className="text-muted-foreground">
                               {history.remarks || '-'}
                             </TableCell>
                             
@@ -905,7 +905,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="text-red-400 hover:text-red-300 hover:bg-slate-600"
+                                className="text-red-500 hover:text-red-300 hover:bg-slate-600"
                                 onClick={() => handleDeleteHistory(history.id)}
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -919,7 +919,7 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
                 ) : (
                   <div className="text-center py-8">
                     <Clock className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-slate-400">No history entries yet</p>
+                    <p className="text-muted-foreground">No history entries yet</p>
                     <p className="text-slate-500 text-sm">Add the first status update above</p>
                   </div>
                 )}
@@ -929,6 +929,6 @@ export default function ShowShipment({ shipment }: ShowShipmentProps) {
           </Card>
         </div>
       </div>
-    </AdminLayout>
+    </AppLayout>
   )
 }

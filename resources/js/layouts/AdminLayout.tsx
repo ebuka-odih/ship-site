@@ -45,7 +45,8 @@ const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Users', href: '/admin/users', icon: Users },
   { name: 'Shipments', href: '/admin/shipments', icon: Package },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
+  { name: 'Profile Settings', href: '/settings/profile', icon: Settings },
+  { name: 'System Settings', href: '/admin/settings', icon: Settings },
 ]
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
@@ -146,9 +147,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
+                    <Link href="/settings/profile">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Profile Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/admin/settings">
                       <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
+                      <span>System Settings</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

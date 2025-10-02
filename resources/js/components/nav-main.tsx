@@ -10,6 +10,20 @@ import { Link, usePage } from '@inertiajs/react';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
+    
+    const isActive = (href: string | { url: string }) => {
+        const url = typeof href === 'string' ? href : href.url;
+        const currentUrl = page.url;
+        
+        // Dashboard should only match exactly /admin
+        if (url === '/admin') {
+            return currentUrl === '/admin';
+        }
+        
+        // For other routes, check if current URL starts with the href
+        return currentUrl.startsWith(url);
+    };
+    
     return (
         <SidebarGroup className="px-2 py-0">
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -18,11 +32,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                             asChild
-                            isActive={page.url.startsWith(
-                                typeof item.href === 'string'
-                                    ? item.href
-                                    : item.href.url,
-                            )}
+                            isActive={isActive(item.href)}
                             tooltip={{ children: item.title }}
                         >
                             <Link href={item.href} prefetch>

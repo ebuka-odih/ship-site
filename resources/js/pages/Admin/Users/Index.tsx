@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AppLayout from '@/layouts/app-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -45,15 +45,15 @@ export default function UsersIndex({ users }: UsersIndexProps) {
   }
 
   return (
-    <AdminLayout>
+    <AppLayout>
       <Head title="Users Management" />
       
-      <div className="space-y-6">
+      <div className="space-y-6 p-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">Users</h1>
-            <p className="text-slate-300">Manage system users and their permissions</p>
+            <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+            <p className="text-muted-foreground">Manage system users and their permissions</p>
           </div>
           <Button asChild>
             <Link href="/admin/users/create">
@@ -64,26 +64,26 @@ export default function UsersIndex({ users }: UsersIndexProps) {
         </div>
 
         {/* Users Table */}
-        <Card className="bg-slate-700 border-slate-600">
-          <CardHeader>
-            <CardTitle className="text-white">All Users</CardTitle>
-            <CardDescription className="text-slate-300">
+        <Card className="p-4">
+          <CardHeader className="px-0 pt-0">
+            <CardTitle className="text-base">All Users</CardTitle>
+            <CardDescription className="text-sm">
               A list of all users in the system with their roles and permissions.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-0 pb-0">
             <Table>
               <TableHeader>
-                <TableRow className="border-slate-600">
-                  <TableHead className="text-slate-300">User</TableHead>
-                  <TableHead className="text-slate-300">Role</TableHead>
-                  <TableHead className="text-slate-300">Created</TableHead>
-                  <TableHead className="text-right text-slate-300">Actions</TableHead>
+                <TableRow>
+                  <TableHead>User</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {users.data.map((user) => (
-                  <TableRow key={user.id} className="border-slate-600 hover:bg-slate-600">
+                  <TableRow key={user.id}>
                     <TableCell>
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-8 w-8">
@@ -93,8 +93,8 @@ export default function UsersIndex({ users }: UsersIndexProps) {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium text-white">{user.name}</div>
-                          <div className="text-sm text-slate-400">{user.email}</div>
+                          <div className="font-medium">{user.name}</div>
+                          <div className="text-sm text-muted-foreground">{user.email}</div>
                         </div>
                       </div>
                     </TableCell>
@@ -103,22 +103,22 @@ export default function UsersIndex({ users }: UsersIndexProps) {
                         {user.role}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-slate-300">
+                    <TableCell className="text-muted-foreground">
                       {new Date(user.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end space-x-2">
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white hover:bg-slate-600">
+                        <Button variant="ghost" size="sm" asChild>
                           <Link href={`/admin/users/${user.id}`}>
                             <Eye className="h-4 w-4" />
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="sm" asChild className="text-slate-300 hover:text-white hover:bg-slate-600">
+                        <Button variant="ghost" size="sm" asChild>
                           <Link href={`/admin/users/${user.id}/edit`}>
                             <Edit className="h-4 w-4" />
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300 hover:bg-slate-600">
+                        <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -131,7 +131,7 @@ export default function UsersIndex({ users }: UsersIndexProps) {
             {/* Pagination */}
             {users.links.length > 3 && (
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm text-slate-400">
+                <div className="text-sm text-muted-foreground">
                   Showing {users.meta.per_page * (users.meta.current_page - 1) + 1} to{' '}
                   {Math.min(users.meta.per_page * users.meta.current_page, users.meta.total)} of{' '}
                   {users.meta.total} results
@@ -144,7 +144,7 @@ export default function UsersIndex({ users }: UsersIndexProps) {
                       size="sm"
                       asChild={!!link.url}
                       disabled={!link.url}
-                      className={link.active ? 'bg-slate-600 text-white' : 'border-slate-500 text-slate-300 hover:bg-slate-600'}
+                      className={link.active ? '' : ''}
                     >
                       {link.url ? (
                         <Link href={link.url}>
@@ -161,7 +161,7 @@ export default function UsersIndex({ users }: UsersIndexProps) {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </AppLayout>
   )
 }
 

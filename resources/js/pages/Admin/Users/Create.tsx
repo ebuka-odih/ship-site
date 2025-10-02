@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react'
-import AdminLayout from '@/layouts/AdminLayout'
+import AppLayout from '@/layouts/app-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -23,10 +23,10 @@ export default function CreateUser() {
   }
 
   return (
-    <AdminLayout>
+    <AppLayout>
       <Head title="Create User" />
       
-      <div className="space-y-6">
+      <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="sm" asChild>
@@ -35,24 +35,24 @@ export default function CreateUser() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Create User</h1>
-            <p className="text-gray-600">Add a new user to the system</p>
+            <h1 className="text-3xl font-bold tracking-tight">Create User</h1>
+            <p className="text-muted-foreground">Add a new user to the system</p>
           </div>
         </div>
 
         {/* Form */}
-        <Card className="max-w-2xl">
-          <CardHeader>
-            <CardTitle>User Information</CardTitle>
-            <CardDescription>
+        <Card className="max-w-2xl p-4">
+          <CardHeader className="px-0 pt-0">
+            <CardTitle className="text-base">User Information</CardTitle>
+            <CardDescription className="text-sm">
               Enter the details for the new user account
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-0">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="name" className="text-sm font-medium">Full Name</Label>
                   <Input
                     id="name"
                     type="text"
@@ -66,7 +66,7 @@ export default function CreateUser() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
                   <Input
                     id="email"
                     type="email"
@@ -82,7 +82,7 @@ export default function CreateUser() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-sm font-medium">Password</Label>
                   <Input
                     id="password"
                     type="password"
@@ -96,7 +96,7 @@ export default function CreateUser() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password_confirmation">Confirm Password</Label>
+                  <Label htmlFor="password_confirmation" className="text-sm font-medium">Confirm Password</Label>
                   <Input
                     id="password_confirmation"
                     type="password"
@@ -111,7 +111,7 @@ export default function CreateUser() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role">Role</Label>
+                <Label htmlFor="role" className="text-sm font-medium">Role</Label>
                 <Select value={data.role} onValueChange={(value) => setData('role', value)}>
                   <SelectTrigger className={errors.role ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Select a role" />
@@ -138,7 +138,7 @@ export default function CreateUser() {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </AppLayout>
   )
 }
 

@@ -8,21 +8,29 @@
             <div class="col-xl-8 col-lg-10">
                 <div class="tracking__content">
                     <!-- Tracking Input Section -->
-                    <div class="tracking__input-section">
+                    <div class="tracking__input-section no-print">
                         <h2 class="tracking__title">ENTER THE CONSIGNMENT NO.</h2>
                         <form class="tracking__form" method="GET" action="{{ route('track') }}">
                             <div class="tracking__input-group">
                                 <input type="text" name="tracking_number" class="tracking__input" 
-                                       placeholder="wpcargo-123" value="{{ request('tracking_number', 'wpcargo-123') }}">
+                                       placeholder="Enter tracking number (e.g., SH65A1B2C3D4E5F)" value="{{ request('tracking_number') }}">
                                 <button type="submit" class="tracking__btn">TRACK RESULT</button>
                             </div>
-                            <p class="tracking__example">EX: 12345</p>
+                            <p class="tracking__example">Try tracking numbers from your shipments (e.g., SH65A1B2C3D4E5F)</p>
                         </form>
                     </div>
 
                     <!-- Tracking Result Section -->
                     @if($trackingNumber && $trackingData)
                     <div class="tracking__result-card">
+                        <!-- Print Header (only visible in print) -->
+                        <div class="print-header" style="display: none;">
+                            <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px;">
+                                <h1 style="margin: 0; font-size: 24px; color: #333;">{{ \App\Models\Setting::get('company_name', config('app.name')) }}</h1>
+                                <p style="margin: 5px 0; font-size: 14px; color: #666;">Shipment Tracking Report</p>
+                                <p style="margin: 0; font-size: 12px; color: #999;">Generated on: {{ now()->format('F j, Y \a\t g:i A') }}</p>
+                            </div>
+                        </div>
                         <!-- Print Button -->
                         <div class="tracking__print">
                             <button onclick="window.print()" class="print__btn">
@@ -49,13 +57,6 @@
                                         <div class="barcode-lines"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="tracking__logo">
-                                <div class="logo__shield">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <span class="logo__text">WPTF</span>
-                                </div>
-                                <div class="logo__company">wptaskforce</div>
                             </div>
                         </div>
 
@@ -199,6 +200,199 @@
     min-height: 100vh;
 }
 
+/* Print Styles */
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    html, body {
+        background: white !important;
+        color: black !important;
+        font-size: 12px;
+        line-height: 1.4;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    body {
+        overflow: visible !important;
+    }
+    
+    .tracking__area {
+        padding: 0 !important;
+        background: white !important;
+        min-height: auto !important;
+    }
+    
+    .tracking__content {
+        background: white !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        padding: 20px !important;
+        margin: 0 !important;
+    }
+    
+    .tracking__input-section {
+        display: none !important;
+    }
+    
+    .tracking__print {
+        display: none !important;
+    }
+    
+    .print-header {
+        display: block !important;
+    }
+    
+    .tracking__header {
+        border-bottom: 2px solid #333 !important;
+        margin-bottom: 20px !important;
+        padding-bottom: 15px !important;
+    }
+    
+    .tracking__number {
+        font-size: 16px !important;
+        font-weight: bold !important;
+        color: #333 !important;
+    }
+    
+    .tracking__barcode {
+        margin: 10px 0 !important;
+    }
+    
+    .barcode-placeholder {
+        height: 30px !important;
+    }
+    
+    .barcode-lines {
+        height: 25px !important;
+        background-color: #333 !important;
+    }
+    
+    .tracking__addresses {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .address__card {
+        background: #f8f9fa !important;
+        border: 1px solid #ddd !important;
+        padding: 15px !important;
+        page-break-inside: avoid !important;
+    }
+    
+    .address__title {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        color: #333 !important;
+        margin-bottom: 10px !important;
+        text-transform: uppercase !important;
+    }
+    
+    .address__item {
+        margin-bottom: 5px !important;
+    }
+    
+    .address__label {
+        font-size: 11px !important;
+        color: #666 !important;
+        font-weight: 500 !important;
+    }
+    
+    .address__value {
+        font-size: 11px !important;
+        color: #333 !important;
+        font-weight: 600 !important;
+    }
+    
+    .tracking__details {
+        border-top: 1px solid #ddd !important;
+        padding-top: 15px !important;
+        page-break-inside: avoid !important;
+    }
+    
+    .details__grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .details__item {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 3px 0 !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+    
+    .details__label {
+        font-size: 10px !important;
+        color: #666 !important;
+        font-weight: 500 !important;
+    }
+    
+    .details__value {
+        font-size: 10px !important;
+        color: #333 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Page breaks */
+    .tracking__result-card {
+        page-break-inside: avoid !important;
+    }
+    
+    /* Hide elements not needed in print */
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Hide footer and navigation from print */
+    footer,
+    .footer__area,
+    .footer__area-two,
+    header,
+    .tg-header__area,
+    .tg-header__top,
+    .newsletter__area,
+    .about__area,
+    .services__area,
+    .work__area,
+    .cta__area,
+    .testimonial__area,
+    .video__area,
+    .slider__area,
+    .breadcrumb__area,
+    .preloader,
+    .scroll__top,
+    .tgmobile__menu,
+    .tgmenu__action,
+    .tgmenu__navbar-wrap {
+        display: none !important;
+    }
+    
+    /* Hide specific sections that might appear */
+    .footer__widget,
+    .footer__link,
+    .footer__info-wrap,
+    .navigation,
+    .tgmenu__wrap {
+        display: none !important;
+    }
+    
+    /* Ensure proper spacing */
+    @page {
+        margin: 0.5in;
+        size: A4;
+    }
+}
+
 .tracking__content {
     background: white;
     border-radius: 8px;
@@ -302,9 +496,6 @@
 
 /* Tracking Header */
 .tracking__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e9ecef;
@@ -335,33 +526,6 @@
     border-radius: 1px;
 }
 
-.tracking__logo {
-    text-align: right;
-}
-
-.logo__shield {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 5px;
-}
-
-.logo__shield i {
-    font-size: 24px;
-    color: #333;
-}
-
-.logo__text {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ff6b35;
-}
-
-.logo__company {
-    font-size: 14px;
-    color: #333;
-    font-weight: 500;
-}
 
 /* Address Sections */
 .tracking__addresses {
@@ -524,12 +688,7 @@
     }
     
     .tracking__header {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .tracking__logo {
-        text-align: left;
+        text-align: center;
     }
     
     .details__grid {

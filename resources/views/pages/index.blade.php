@@ -45,33 +45,6 @@
         </section>
         <!-- slider-area-end -->
 
-        <!-- tracking-area -->
-        <section class="tracking__area-home">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xl-8 col-lg-10">
-                        <div class="tracking__content-home">
-                            <div class="tracking__header-home">
-                                <h2 class="tracking__title-home">TRACK YOUR SHIPMENT</h2>
-                                <p class="tracking__subtitle">Enter your tracking number to get real-time updates</p>
-                            </div>
-                            <form class="tracking__form-home" method="GET" action="{{ route('track') }}">
-                                <div class="tracking__input-group-home">
-                                    <input type="text" name="tracking_number" class="tracking__input-home" 
-                                           placeholder="Enter tracking number..." required>
-                                    <button type="submit" class="tracking__btn-home">
-                                        <i class="fas fa-search"></i>
-                                        TRACK NOW
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- tracking-area-end -->
-
         <!-- newsletter-area -->
         <section class="newsletter__area">
             <div class="container">
@@ -80,9 +53,8 @@
                         <div class="col-lg-12">
                             <div class="newsletter__content">
                                 <h2 class="title"><i class="flaticon-waving-flag"></i>Track Shipment</h2>
-                                <form action="/track/shipment" method="POST" class="newsletter__form d-flex flex-wrap gap-2">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" autocomplete="off">
-                                    <input type="text" class="form-control flex-fill" id="shipment_code" name="shipment_code" value="" placeholder="Enter shipment code (e.g., ABC123XYZ)" required>
+                                <form action="{{ route('track') }}" method="GET" class="newsletter__form d-flex flex-wrap gap-2">
+                                    <input type="text" class="form-control flex-fill" id="tracking_number" name="tracking_number" value="" placeholder="Enter tracking number (e.g., SH65A1B2C3D4E5F)" required>
                                     <button type="submit" class="btn btn-primary">Track Shipment <i class="fas fa-search ms-1"></i></button>
                                 </form>
                                 <img src="assets/img/images/newsletter_shape02.svg" alt="" class="shape rotateme-two">

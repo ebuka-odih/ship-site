@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,121 +28,96 @@ class TrackingController extends Controller
      */
     private function getTrackingData($trackingNumber)
     {
-        // Sample tracking data - in a real application, this would come from your database
-        $sampleData = [
-            'wpcargo-123' => [
-                'tracking_number' => 'WPCARGO-123',
-                'status' => 'In Transit',
-                'shipper' => [
-                    'name' => 'Peter John Villanueva',
-                    'phone' => '639269901717',
-                    'address' => 'CPU Centennial Village Aganan, Pavia, Iloilo, 5001, Philippines',
-                    'email' => 'villanuevapj17@gmail.com'
-                ],
-                'receiver' => [
-                    'name' => 'John Smith',
-                    'phone' => '9876543210',
-                    'address' => 'Building 3 Floor 4 123 Main Street Salt Lake City',
-                    'email' => 'rgmadredano@woosteps.com'
-                ],
-                'shipment_details' => [
-                    'mode' => 'Mode 2',
-                    'type_of_shipment' => 'Shipment 3',
-                    'courier' => 'Courier 1',
-                    'packages' => 'Package 101',
-                    'quantity' => '150 box',
-                    'payment_mode' => 'Stripe',
-                    'carrier' => 'Carrier Name',
-                    'carrier_reference_no' => 'REF123456',
-                    'weight' => '400kg',
-                    'product' => 'Product 20301',
-                    'total_freight' => '$20,000',
-                    'departure_time' => '2024-01-15 10:30 AM'
-                ],
-                'tracking_history' => [
-                    [
-                        'date' => '2024-01-15 10:30 AM',
-                        'status' => 'Package picked up',
-                        'location' => 'Pavia, Iloilo, Philippines'
-                    ],
-                    [
-                        'date' => '2024-01-15 2:45 PM',
-                        'status' => 'In transit to sorting facility',
-                        'location' => 'Iloilo City, Philippines'
-                    ],
-                    [
-                        'date' => '2024-01-16 8:20 AM',
-                        'status' => 'Arrived at sorting facility',
-                        'location' => 'Manila, Philippines'
-                    ],
-                    [
-                        'date' => '2024-01-16 3:15 PM',
-                        'status' => 'Departed from sorting facility',
-                        'location' => 'Manila, Philippines'
-                    ]
-                ]
+        // Find the shipment by tracking number
+        $shipment = Shipment::where('tracking_number', $trackingNumber)->first();
+        
+        if (!$shipment) {
+            return null;
+        }
+        
+        // Format the tracking data for display
+        return [
+            'tracking_number' => $shipment->tracking_number,
+            'status' => ucfirst(str_replace('_', ' ', $shipment->status)),
+            'shipper' => [
+                'name' => $shipment->shipper_name,
+                'phone' => $shipment->shipper_phone,
+                'address' => $shipment->shipper_address,
+                'email' => $shipment->shipper_email
             ],
-            'wpcargo-456' => [
-                'tracking_number' => 'WPCARGO-456',
-                'status' => 'Delivered',
-                'shipper' => [
-                    'name' => 'Maria Garcia',
-                    'phone' => '639123456789',
-                    'address' => '123 Business District, Makati City, Philippines',
-                    'email' => 'maria.garcia@email.com'
-                ],
-                'receiver' => [
-                    'name' => 'David Johnson',
-                    'phone' => '1234567890',
-                    'address' => '456 Oak Street, New York, NY 10001',
-                    'email' => 'david.johnson@email.com'
-                ],
-                'shipment_details' => [
-                    'mode' => 'Mode 1',
-                    'type_of_shipment' => 'Express Delivery',
-                    'courier' => 'Express Courier',
-                    'packages' => 'Package 202',
-                    'quantity' => '25 items',
-                    'payment_mode' => 'Credit Card',
-                    'carrier' => 'Express Logistics',
-                    'carrier_reference_no' => 'EXP789012',
-                    'weight' => '15kg',
-                    'product' => 'Electronics',
-                    'total_freight' => '$1,500',
-                    'departure_time' => '2024-01-10 9:00 AM'
-                ],
-                'tracking_history' => [
-                    [
-                        'date' => '2024-01-10 9:00 AM',
-                        'status' => 'Package picked up',
-                        'location' => 'Makati City, Philippines'
-                    ],
-                    [
-                        'date' => '2024-01-10 11:30 AM',
-                        'status' => 'In transit',
-                        'location' => 'Manila Airport, Philippines'
-                    ],
-                    [
-                        'date' => '2024-01-11 2:15 PM',
-                        'status' => 'Arrived at destination country',
-                        'location' => 'New York, USA'
-                    ],
-                    [
-                        'date' => '2024-01-12 10:45 AM',
-                        'status' => 'Out for delivery',
-                        'location' => 'New York, USA'
-                    ],
-                    [
-                        'date' => '2024-01-12 3:20 PM',
-                        'status' => 'Delivered',
-                        'location' => 'New York, USA'
-                    ]
-                ]
-            ]
+            'receiver' => [
+                'name' => $shipment->receiver_name,
+                'phone' => $shipment->receiver_phone,
+                'address' => $shipment->receiver_address,
+                'email' => $shipment->receiver_email
+            ],
+            'shipment_details' => [
+                'mode' => $shipment->mode ?? 'N/A',
+                'type_of_shipment' => $shipment->type_of_shipment ?? 'N/A',
+                'courier' => $shipment->courier ?? 'N/A',
+                'packages' => $shipment->packages ?? 'N/A',
+                'quantity' => $shipment->quantity ?? 'N/A',
+                'payment_mode' => $shipment->payment_mode ?? 'N/A',
+                'carrier' => $shipment->carrier ?? 'N/A',
+                'carrier_reference_no' => $shipment->carrier_reference_no ?? 'N/A',
+                'weight' => $shipment->weight ?? 'N/A',
+                'product' => $shipment->product ?? 'N/A',
+                'total_freight' => $shipment->total_freight ?? 'N/A',
+                'departure_time' => $shipment->departure_time ? $shipment->departure_time->format('Y-m-d H:i A') : 'N/A'
+            ],
+            'tracking_history' => $this->getTrackingHistory($shipment)
+        ];
+    }
+    
+    /**
+     * Get tracking history for a shipment
+     */
+    private function getTrackingHistory($shipment)
+    {
+        $history = [];
+        
+        // Add initial status
+        $history[] = [
+            'date' => $shipment->created_at->format('Y-m-d H:i A'),
+            'status' => 'Shipment created',
+            'location' => $shipment->origin ?? 'Origin'
         ];
         
-        // Return data if tracking number exists, otherwise return null
-        return $sampleData[strtolower($trackingNumber)] ?? null;
+        // Add pickup if scheduled
+        if ($shipment->pickup_date) {
+            $pickupDateTime = $shipment->pickup_date . ' ' . ($shipment->pickup_time ?? '09:00');
+            $history[] = [
+                'date' => $pickupDateTime,
+                'status' => 'Package picked up',
+                'location' => $shipment->origin ?? 'Origin'
+            ];
+        }
+        
+        // Add status changes based on current status
+        if ($shipment->status === 'in_transit') {
+            $history[] = [
+                'date' => $shipment->updated_at->format('Y-m-d H:i A'),
+                'status' => 'In transit',
+                'location' => $shipment->destination ?? 'In transit'
+            ];
+        } elseif ($shipment->status === 'delivered') {
+            $history[] = [
+                'date' => $shipment->updated_at->format('Y-m-d H:i A'),
+                'status' => 'Delivered',
+                'location' => $shipment->destination ?? 'Destination'
+            ];
+        }
+        
+        // Add expected delivery if set
+        if ($shipment->expected_delivery_date) {
+            $history[] = [
+                'date' => $shipment->expected_delivery_date->format('Y-m-d H:i A'),
+                'status' => 'Expected delivery',
+                'location' => $shipment->destination ?? 'Destination'
+            ];
+        }
+        
+        return $history;
     }
     
     /**

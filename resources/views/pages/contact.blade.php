@@ -94,7 +94,7 @@
                                     <h3 class="fw-bold mb-4">Send us a Message</h3>
                                     <p class="text-muted mb-4">Ready to get started? Fill out the form and our team will get back to you within 24 hours with a customized shipping solution.</p>
                                     
-                                    <form action="#" method="POST" class="needs-validation" novalidate>
+                                    <form id="contactForm" action="{{ route('contact.store') }}" method="POST" class="needs-validation" novalidate>
                                         @csrf
                                         <div class="row g-3">
                                             <div class="col-md-6">
@@ -103,6 +103,7 @@
                                                 <div class="invalid-feedback">
                                                     Please provide your name.
                                                 </div>
+                                                <div id="name-error" class="text-danger small mt-1" style="display: none;"></div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="email" class="form-label">Your Email *</label>
@@ -110,10 +111,12 @@
                                                 <div class="invalid-feedback">
                                                     Please provide a valid email.
                                                 </div>
+                                                <div id="email-error" class="text-danger small mt-1" style="display: none;"></div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="phone" class="form-label">Your Phone</label>
                                                 <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                                                <div id="phone-error" class="text-danger small mt-1" style="display: none;"></div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="service" class="form-label">Service Required *</label>
@@ -129,6 +132,7 @@
                                                 <div class="invalid-feedback">
                                                     Please select a service.
                                                 </div>
+                                                <div id="service-error" class="text-danger small mt-1" style="display: none;"></div>
                                             </div>
                                             <div class="col-12">
                                                 <label for="message" class="form-label">Message *</label>
@@ -136,10 +140,16 @@
                                                 <div class="invalid-feedback">
                                                     Please provide your message.
                                                 </div>
+                                                <div id="message-error" class="text-danger small mt-1" style="display: none;"></div>
                                             </div>
                                             <div class="col-12">
-                                                <button type="submit" class="btn btn-danger btn-lg px-5">
-                                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                                <button type="submit" id="submitBtn" class="btn btn-danger btn-lg px-5">
+                                                    <span id="submitText">
+                                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                                    </span>
+                                                    <span id="loadingText" style="display: none;">
+                                                        <i class="fas fa-spinner fa-spin me-2"></i>Sending...
+                                                    </span>
                                                 </button>
                                             </div>
                                         </div>
@@ -229,11 +239,140 @@
 </main>
 <!-- main-area-end -->
 
+<!-- Success/Error Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div id="successContent" style="display: none;">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-check text-success" style="font-size: 2rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-success mb-3">Message Sent Successfully!</h4>
+                    <p class="text-muted mb-4">Thank you for contacting us. We have received your message and will get back to you within 24 hours.</p>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div id="errorContent" style="display: none;">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-exclamation-triangle text-danger" style="font-size: 2rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-danger mb-3">Error Sending Message</h4>
+                    <p class="text-muted mb-4" id="errorMessage">Sorry, there was an error sending your message. Please try again or contact us directly.</p>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-// Bootstrap form validation
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
+// Contact Form Handling
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const loadingText = document.getElementById('loadingText');
+    const modal = new bootstrap.Modal(document.getElementById('contactModal'));
+    const successContent = document.getElementById('successContent');
+    const errorContent = document.getElementById('errorContent');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Clear error messages
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('[id$="-error"]');
+        errorElements.forEach(element => {
+            element.style.display = 'none';
+            element.textContent = '';
+        });
+        
+        // Remove error styling from form controls
+        const formControls = form.querySelectorAll('.form-control, .form-select');
+        formControls.forEach(control => {
+            control.classList.remove('is-invalid');
+        });
+    }
+
+    // Show field errors
+    function showFieldErrors(errors) {
+        Object.keys(errors).forEach(field => {
+            const errorElement = document.getElementById(field + '-error');
+            const formControl = document.getElementById(field);
+            
+            if (errorElement && formControl) {
+                errorElement.textContent = errors[field][0];
+                errorElement.style.display = 'block';
+                formControl.classList.add('is-invalid');
+            }
+        });
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        clearErrors();
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitText.style.display = 'none';
+        loadingText.style.display = 'inline';
+        
+        // Get form data
+        const formData = new FormData(form);
+        
+        // Send AJAX request
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success modal
+                successContent.style.display = 'block';
+                errorContent.style.display = 'none';
+                modal.show();
+                
+                // Reset form
+                form.reset();
+                form.classList.remove('was-validated');
+            } else {
+                if (data.errors) {
+                    showFieldErrors(data.errors);
+                } else {
+                    // Show error modal
+                    errorMessage.textContent = data.message || 'An error occurred. Please try again.';
+                    successContent.style.display = 'none';
+                    errorContent.style.display = 'block';
+                    modal.show();
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'Network error. Please check your connection and try again.';
+            successContent.style.display = 'none';
+            errorContent.style.display = 'block';
+            modal.show();
+        })
+        .finally(() => {
+            // Hide loading state
+            submitBtn.disabled = false;
+            submitText.style.display = 'inline';
+            loadingText.style.display = 'none';
+        });
+    });
+
+    // Bootstrap form validation
+    (function() {
+        'use strict';
         var forms = document.getElementsByClassName('needs-validation');
         var validation = Array.prototype.filter.call(forms, function(form) {
             form.addEventListener('submit', function(event) {
@@ -244,8 +383,8 @@
                 form.classList.add('was-validated');
             }, false);
         });
-    }, false);
-})();
+    })();
+});
 </script>
 
 @endsection

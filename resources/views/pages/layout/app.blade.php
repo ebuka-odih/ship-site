@@ -9,6 +9,7 @@
     <title>{{ \App\Models\Setting::get('company_name', config('app.name')) }}</title>
     <meta name="description" content="{{ \App\Models\Setting::get('company_name', config('app.name')) }} - Transport & Logistics Solutions">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
     <!-- Place favicon.ico in the root directory -->
@@ -269,136 +270,6 @@
        scroll-behavior: smooth;
    }
 
-   /* Homepage Tracking Form Styles */
-   .tracking__area-home {
-       padding: 80px 0;
-       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-       position: relative;
-       overflow: hidden;
-   }
-
-   .tracking__area-home::before {
-       content: '';
-       position: absolute;
-       top: 0;
-       left: 0;
-       right: 0;
-       bottom: 0;
-       background: rgba(0, 0, 0, 0.1);
-       z-index: 1;
-   }
-
-   .tracking__content-home {
-       position: relative;
-       z-index: 2;
-       text-align: center;
-   }
-
-   .tracking__header-home {
-       margin-bottom: 40px;
-   }
-
-   .tracking__title-home {
-       font-size: 36px;
-       font-weight: 700;
-       color: white;
-       margin-bottom: 15px;
-       text-transform: uppercase;
-       letter-spacing: 2px;
-       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-   }
-
-   .tracking__subtitle {
-       font-size: 18px;
-       color: rgba(255, 255, 255, 0.9);
-       margin: 0;
-       font-weight: 300;
-   }
-
-   .tracking__form-home {
-       max-width: 600px;
-       margin: 0 auto;
-   }
-
-   .tracking__input-group-home {
-       display: flex;
-       gap: 0;
-       background: white;
-       border-radius: 50px;
-       padding: 8px;
-       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-   }
-
-   .tracking__input-home {
-       flex: 1;
-       padding: 20px 25px;
-       border: none;
-       outline: none;
-       font-size: 16px;
-       border-radius: 50px 0 0 50px;
-       background: transparent;
-   }
-
-   .tracking__input-home::placeholder {
-       color: #999;
-   }
-
-   .tracking__btn-home {
-       background: linear-gradient(45deg, #ff6b35, #f7931e);
-       color: white;
-       border: none;
-       padding: 20px 35px;
-       border-radius: 0 50px 50px 0;
-       font-size: 16px;
-       font-weight: 600;
-       cursor: pointer;
-       transition: all 0.3s ease;
-       text-transform: uppercase;
-       letter-spacing: 1px;
-       display: flex;
-       align-items: center;
-       gap: 8px;
-   }
-
-   .tracking__btn-home:hover {
-       background: linear-gradient(45deg, #e55a2b, #e0841a);
-       transform: translateY(-2px);
-       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-   }
-
-   .tracking__btn-home i {
-       font-size: 18px;
-   }
-
-   /* Responsive Design for Homepage Tracking */
-   @media (max-width: 768px) {
-       .tracking__title-home {
-           font-size: 28px;
-           letter-spacing: 1px;
-       }
-       
-       .tracking__subtitle {
-           font-size: 16px;
-       }
-       
-       .tracking__input-group-home {
-           flex-direction: column;
-           border-radius: 15px;
-           padding: 15px;
-           gap: 15px;
-       }
-       
-       .tracking__input-home {
-           border-radius: 10px;
-           padding: 15px 20px;
-       }
-       
-       .tracking__btn-home {
-           border-radius: 10px;
-           padding: 15px 25px;
-           justify-content: center;
-       }
-   }
 
    /* Mobile Menu Styling */
    .tgmobile__menu {

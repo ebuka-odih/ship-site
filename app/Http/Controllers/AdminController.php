@@ -21,10 +21,8 @@ class AdminController extends Controller
             'active_shipments' => Shipment::whereIn('status', ['in_transit', 'out_for_delivery'])->count(),
             'pending_shipments' => Shipment::where('status', 'pending')->count(),
             'delivered_shipments' => Shipment::where('status', 'delivered')->count(),
-            'total_revenue' => Shipment::sum('value') ?? 0,
-            'monthly_revenue' => Shipment::whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->sum('value') ?? 0,
+            'total_revenue' => $this->calculateTotalRevenue(),
+            'monthly_revenue' => $this->calculateMonthlyRevenue(),
             'user_growth' => $this->calculateUserGrowth(),
             'recent_users' => User::where('role', 'user')
                 ->latest()
@@ -55,6 +53,48 @@ class AdminController extends Controller
         }
         
         return round((($currentMonth - $lastMonth) / $lastMonth) * 100);
+    }
+
+    /**
+     * Calculate total revenue from shipments
+     */
+    private function calculateTotalRevenue()
+    {
+        $shipments = Shipment::whereNotNull('total_freight')->get();
+        $total = 0;
+        
+        foreach ($shipments as $shipment) {
+            // Extract numeric value from total_freight (remove currency symbols)
+            $freight = preg_replace('/[^0-9.]/', '', $shipment->total_freight);
+            if (is_numeric($freight)) {
+                $total += (float) $freight;
+            }
+        }
+        
+        return $total;
+    }
+
+    /**
+     * Calculate monthly revenue from shipments
+     */
+    private function calculateMonthlyRevenue()
+    {
+        $shipments = Shipment::whereNotNull('total_freight')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->get();
+            
+        $total = 0;
+        
+        foreach ($shipments as $shipment) {
+            // Extract numeric value from total_freight (remove currency symbols)
+            $freight = preg_replace('/[^0-9.]/', '', $shipment->total_freight);
+            if (is_numeric($freight)) {
+                $total += (float) $freight;
+            }
+        }
+        
+        return $total;
     }
 
     /**

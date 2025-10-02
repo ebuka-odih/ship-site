@@ -21,7 +21,7 @@
                     </div>
 
                     <!-- Tracking Result Section -->
-                    @if(request('tracking_number'))
+                    @if($trackingNumber && $trackingData)
                     <div class="tracking__result-card">
                         <!-- Print Button -->
                         <div class="tracking__print">
@@ -33,7 +33,7 @@
                         <!-- Tracking Header -->
                         <div class="tracking__header">
                             <div class="tracking__number-section">
-                                <h3 class="tracking__number">Tracking No: {{ strtoupper(request('tracking_number')) }}</h3>
+                                <h3 class="tracking__number">Tracking No: {{ $trackingData['tracking_number'] }}</h3>
                                 <div class="tracking__barcode">
                                     <!-- Barcode placeholder - you can integrate a barcode generator here -->
                                     <div class="barcode-placeholder">
@@ -67,19 +67,19 @@
                                 <div class="address__details">
                                     <div class="address__item">
                                         <span class="address__label">Shipper Name :</span>
-                                        <span class="address__value">Peter John Villanueva</span>
+                                        <span class="address__value">{{ $trackingData['shipper']['name'] }}</span>
                                     </div>
                                     <div class="address__item">
                                         <span class="address__label">Phone Number :</span>
-                                        <span class="address__value">639269901717</span>
+                                        <span class="address__value">{{ $trackingData['shipper']['phone'] }}</span>
                                     </div>
                                     <div class="address__item">
                                         <span class="address__label">Address :</span>
-                                        <span class="address__value">CPU Centennial Village Aganan, Pavia, Iloilo, 5001, Philippines</span>
+                                        <span class="address__value">{{ $trackingData['shipper']['address'] }}</span>
                                     </div>
                                     <div class="address__item">
                                         <span class="address__label">Email :</span>
-                                        <span class="address__value">villanuevapj17@gmail.com</span>
+                                        <span class="address__value">{{ $trackingData['shipper']['email'] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -90,19 +90,19 @@
                                 <div class="address__details">
                                     <div class="address__item">
                                         <span class="address__label">Receiver Name :</span>
-                                        <span class="address__value">John Smith</span>
+                                        <span class="address__value">{{ $trackingData['receiver']['name'] }}</span>
                                     </div>
                                     <div class="address__item">
                                         <span class="address__label">Phone Number :</span>
-                                        <span class="address__value">9876543210</span>
+                                        <span class="address__value">{{ $trackingData['receiver']['phone'] }}</span>
                                     </div>
                                     <div class="address__item">
                                         <span class="address__label">Address :</span>
-                                        <span class="address__value">Building 3 Floor 4 123 Main Street Salt Lake City</span>
+                                        <span class="address__value">{{ $trackingData['receiver']['address'] }}</span>
                                     </div>
                                     <div class="address__item">
                                         <span class="address__label">Email :</span>
-                                        <span class="address__value">rgmadredano@woosteps.com</span>
+                                        <span class="address__value">{{ $trackingData['receiver']['email'] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -113,53 +113,74 @@
                             <div class="details__grid">
                                 <div class="details__item">
                                     <span class="details__label">Mode :</span>
-                                    <span class="details__value">Mode 2</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['mode'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Type of Shipment :</span>
-                                    <span class="details__value">Shipment 3</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['type_of_shipment'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Courier :</span>
-                                    <span class="details__value">Courier 1</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['courier'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Packages :</span>
-                                    <span class="details__value">Package 101</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['packages'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Quantity :</span>
-                                    <span class="details__value">150 box</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['quantity'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Payment Mode :</span>
-                                    <span class="details__value">Stripe</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['payment_mode'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Carrier :</span>
-                                    <span class="details__value">Carrier Name</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['carrier'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Carrier Reference No. :</span>
-                                    <span class="details__value">REF123456</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['carrier_reference_no'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Weight :</span>
-                                    <span class="details__value">400kg</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['weight'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Product :</span>
-                                    <span class="details__value">Product 20301</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['product'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Total Freight :</span>
-                                    <span class="details__value">$20,000</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['total_freight'] }}</span>
                                 </div>
                                 <div class="details__item">
                                     <span class="details__label">Departure Time :</span>
-                                    <span class="details__value">2024-01-15 10:30 AM</span>
+                                    <span class="details__value">{{ $trackingData['shipment_details']['departure_time'] }}</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    @elseif($trackingNumber && !$trackingData)
+                    <!-- Tracking Not Found -->
+                    <div class="tracking__not-found">
+                        <div class="not-found__icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="not-found__title">Tracking Number Not Found</h3>
+                        <p class="not-found__message">
+                            The tracking number "{{ $trackingNumber }}" was not found in our system. 
+                            Please check your tracking number and try again.
+                        </p>
+                        <div class="not-found__suggestions">
+                            <h4>Please check:</h4>
+                            <ul>
+                                <li>Make sure you entered the correct tracking number</li>
+                                <li>Check for any typos or extra spaces</li>
+                                <li>Try entering the tracking number without any prefixes</li>
+                                <li>Contact customer support if the issue persists</li>
+                            </ul>
                         </div>
                     </div>
                     @endif
@@ -422,6 +443,72 @@
     font-weight: 600;
 }
 
+/* Tracking Not Found Styles */
+.tracking__not-found {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+}
+
+.not-found__icon {
+    font-size: 48px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.not-found__title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.not-found__message {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.not-found__suggestions {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.not-found__suggestions h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.not-found__suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.not-found__suggestions li {
+    padding: 8px 0;
+    color: #6c757d;
+    position: relative;
+    padding-left: 20px;
+}
+
+.not-found__suggestions li::before {
+    content: "•";
+    color: #007bff;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .tracking__content {
@@ -447,6 +534,18 @@
     
     .details__grid {
         grid-template-columns: 1fr;
+    }
+    
+    .tracking__not-found {
+        padding: 30px 20px;
+    }
+    
+    .not-found__title {
+        font-size: 20px;
+    }
+    
+    .not-found__message {
+        font-size: 14px;
     }
 }
 </style>
